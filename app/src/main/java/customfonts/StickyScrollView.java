@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 
 
-import com.example.mr_virwus.ammen.R;
+import com.wolfsoft.Ammen.R;
 
 import java.util.ArrayList;
 

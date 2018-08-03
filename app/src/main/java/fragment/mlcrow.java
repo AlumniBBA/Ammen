@@ -1,17 +1,12 @@
 package fragment;
 
 import android.app.Activity;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,18 +14,18 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.example.mr_virwus.ammen.JSONParser;
-import com.example.mr_virwus.ammen.R;
+import com.github.lzyzsd.circleprogress.ArcProgress;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.wolfsoft.Ammen.JSONParser;
+import com.wolfsoft.Ammen.R;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static com.google.android.gms.internal.zzagz.runOnUiThread;
 
@@ -44,10 +39,12 @@ public class mlcrow extends Fragment {
     public static String responce,state1,state2;
     private TextView crowd ;
     //private CircleProgress circleProgress;
-    //private ArcProgress temp,hum,per;
+
+
+
     private Handler handler = new Handler();
     private int tempi,humi,perso;
-    private final int f = 3000;
+    private final int f = 9000;
     private final int r = 1000;
     private ToggleButton Door1,Door2;
     private GoogleApiClient client ;
@@ -56,67 +53,45 @@ public class mlcrow extends Fragment {
     private Boolean cancel ;
     private ProgressDialog pDialog;
     private Button about;
+    private double jamarat1,jamarat2,jamarat3;
+
     String pid;
     JSONParser jsonParser = new JSONParser();
 
     private Activity activity ;
 
     // private static final String url_get_data = "http://10.7.0.205/esp8266/get_data.php";
-    private static final String url_get_data = "http://10.1.5.15:4567/vision";//?place=jeddah&label=crowd";
+    private static final String url_get_data = "http://35.196.112.188:4567/vision";//?place=jeddah&label=crowd";
 
-    private static final String TAG_SUCCESS = "success";
-    private static final String TAG_BASE = "esp8266";
-    private static final String TAG_ETAT_DOOR = "door";
-    private static final String TAG_ETAT_DOOR1 = "door1";
-    private static final String TAG_ETAT_TEMP = "temp";
-    private static final String TAG_ETAT_HUM = "hum";
-    private static final String TAG_ETAT_PERS = "person";
-    private static final String TAG_IP_ADRESS = "ip";
 
+    private ArcProgress temp,hum,per;
     private String led1Status;
     private String serverAdresses;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.activity_mlcrow, container, false);
+        view = inflater.inflate(R.layout.fragment_doors, container, false);
 
         client = new GoogleApiClient.Builder(getContext()).addApi(AppIndex.API).build();
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+        temp = (ArcProgress) view.findViewById(R.id.etage1);
+        hum = (ArcProgress) view.findViewById(R.id.etage2);
+        per = (ArcProgress) view.findViewById(R.id.etage3);
+
         activity = getActivity();
 
-        Intent i = getActivity().getIntent();
+        //Intent i = getActivity().getIntent();
 
 
         GetData();
 
-        crowd = (TextView) view.findViewById(R.id.textView2);
+        //crowd = (TextView) view.findViewById(R.id.textView2);
 
 
         return view;
 
 
 
-    }
-
-
-    public void notification()
-    {
-        addNotification();
-    }
-    private void addNotification()
-    {
-        NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(getContext())
-                        .setSmallIcon(R.drawable.ic_audiotrack_light)
-                        .setContentTitle("Person Arrived...")   //this is the title of notification
-                        .setColor(101)
-                        .setContentText("New Person Arrived to your house.");   //this is the message showed in notification
-        Intent intent = new Intent(getContext(),getClass());
-        PendingIntent contentIntent = PendingIntent.getActivity(getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(contentIntent);
-        // Add as notification
-        NotificationManager manager = (NotificationManager) activity.getSystemService(getContext().NOTIFICATION_SERVICE);
-        manager.notify(0, builder.build());
     }
 
     public void GetData() {
@@ -163,29 +138,54 @@ public class mlcrow extends Fragment {
                     int success;
                     // create paramater
                     List<NameValuePair> params = new ArrayList<NameValuePair>();
-
-                    params.add(new BasicNameValuePair("place", "jeddah"));
+                    List<NameValuePair> params1 = new ArrayList<NameValuePair>();
+                    List<NameValuePair> params2 = new ArrayList<NameValuePair>();
+                    //List<NameValuePair> params3 = new ArrayList<NameValuePair>();
+                    params.add(new BasicNameValuePair("place", "jamarat_1"));
+                    params1.add(new BasicNameValuePair("place", "jamarat_2"));
+                    params2.add(new BasicNameValuePair("place", "jamarat_3"));
                     params.add(new BasicNameValuePair("label", "crowd"));
-
+                    params1.add(new BasicNameValuePair("label", "crowd"));
+                    params2.add(new BasicNameValuePair("label", "crowd"));
+                    params.add(new BasicNameValuePair("json", "true"));
+                    params1.add(new BasicNameValuePair("json", "true"));
+                    params2.add(new BasicNameValuePair("json", "true"));
                     // get details from the list using http request
 
-                    JSONObject json = jsonParser.makeHttpRequest(
-                            url_get_data, "GET", params);
+                   // JSONObject json = jsonParser.makeHttpRequest(
+                     //       url_get_data, "GET", params);
+
+                    //JSONObject json1 = jsonParser.makeHttpRequest(
+                      //      url_get_data, "GET", params1);
+
+                    //JSONObject json2 = jsonParser.makeHttpRequest(
+                      //      url_get_data, "GET", params2);
 
                     //getJSONArray("crowd"); // JSON
 
                     // Array
 
                     // check our logs with json response
-                    try {
-                       // Log.d("crowd", String.valueOf(json.getDouble("crowd")));
-                        crowd.setText(String.valueOf(json.getDouble("crowd")));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
 
-                    Log.d("Single Product Details", json.toString());
+                        // Log.d("crowd", String.valueOf(json.toString()));
+                         //jamarat1 = json.getDouble("crowd");
+                        //jamarat2 = json1.getDouble("crowd");
+                        //jamarat3 = json2.getDouble("crowd");
+                        //jamarat1 *= 100.0;
+                        //jamarat2 *= 100.0;
+                        //jamarat3 *= 100.0;
+                      //  Log.d("Single Product Details", json.toString());
 
+
+
+                    Random rand = new Random();
+                    int n = rand.nextInt(90);
+
+                    temp.setProgress(n);
+                    n = rand.nextInt(90);
+                    hum.setProgress(n);
+                    n = rand.nextInt(90);
+                    per.setProgress(n);
                     // Array
 
                     // get first list object from json array

@@ -3,11 +3,12 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 26
     defaultConfig {
-        applicationId "com.example.mr_virwus.ammen"
-        minSdkVersion 19
+        applicationId "com.wolfsoft.propertyui"
+        minSdkVersion 15
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     useLibrary 'org.apache.http.legacy'
@@ -17,6 +18,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/main/assets/'] } }
 }
 
@@ -28,6 +30,7 @@ allprojects {
 
     }
 }
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     //noinspection GradleCompatible,GradleCompatible
@@ -48,8 +51,16 @@ dependencies {
 
     compile 'com.google.android.gms:play-services:11.0.4'
     compile 'com.google.maps.android:android-maps-utils:0.5+'
-
+    compile 'com.github.anastr:speedviewlib:1.1.6'
+    compile 'com.github.lzyzsd:circleprogress:1.2.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }
+
+
+
+
+
+
+apply plugin: 'com.google.gms.google-services'

@@ -35,7 +35,7 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.maps.android.heatmaps.HeatmapTileProvider;
-import com.example.mr_virwus.ammen.R;
+import com.wolfsoft.Ammen.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -190,7 +190,7 @@ public class track extends Fragment implements OnMapReadyCallback,
 
 
         // CameraPosition cameraPosition = new CameraPosition.Builder().target(list.get(0)).zoom(10).build();
-        CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(20).build();
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(34).build();
        // mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
         if(client != null)
