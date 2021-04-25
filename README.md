@@ -1,6 +1,7 @@
 # Ammen
 Crowd organization and waste elimination
-the idea is to create a full guide system for the Pilgrims with the use of google Cloud AI.
+
+# the idea is to create a full guide system for the Pilgrims with the use of google Cloud AI.
 
 1- watter source.
 
